@@ -18,10 +18,12 @@ export interface TimelineEvent {
 export interface MapLocation {
   id: string;
   name: string;
+  country: string;
   latitude: number;
   longitude: number;
   description: string;
   category: string;
+  partnership_year: number | null;
   created_at: string;
 }
 

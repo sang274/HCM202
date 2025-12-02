@@ -45,23 +45,6 @@ export default function InteractiveMap() {
       .limit(1);
 
     if (existing && existing.length > 0) return;
-
-    await supabase.from('map_locations').insert([
-      {
-        name: 'Việt Nam',
-        latitude: VIETNAM_COORDS.y,
-        longitude: VIETNAM_COORDS.x,
-        description: 'Việt Nam - Trung tâm của khối đại đoàn kết dân tộc và đoàn kết quốc tế',
-        category: 'main',
-      },
-      {
-        name: 'ASEAN',
-        latitude: 60,
-        longitude: 77,
-        description: 'Hiệp hội các quốc gia Đông Nam Á - Đối tác chiến lược quan trọng',
-        category: 'regional',
-      },
-    ]);
   }
 
   async function loadLocations() {
@@ -304,7 +287,17 @@ export default function InteractiveMap() {
                 onClick={() => setSelectedLocation(location)}
                 className="text-left bg-white p-4 rounded-lg border-2 border-slate-200 hover:border-green-500 hover:shadow-lg transition-all"
               >
-                <h4 className="font-bold text-slate-800 mb-2">{location.name}</h4>
+                <div className="flex items-start justify-between mb-2">
+                  <h4 className="font-bold text-slate-800">{location.name}</h4>
+                  {location.partnership_year && (
+                    <span className="text-xs font-semibold bg-green-100 text-green-700 px-2 py-1 rounded-full">
+                      {location.partnership_year}
+                    </span>
+                  )}
+                </div>
+                {location.country && location.country !== location.name && (
+                  <p className="text-xs text-slate-500 mb-1">{location.country}</p>
+                )}
                 <p className="text-sm text-slate-600 line-clamp-2">{location.description}</p>
               </button>
             ))}
@@ -317,6 +310,8 @@ export default function InteractiveMap() {
         onClose={() => setSelectedLocation(null)}
         title={selectedLocation?.name || ''}
         content={selectedLocation?.description || ''}
+        country={selectedLocation?.country}
+        partnershipYear={selectedLocation?.partnership_year}
       />
     </div>
   );
